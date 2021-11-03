@@ -65,7 +65,9 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     //INSERT CODE HERE
-
+    cudaMalloc((void**)&A_d,sizeof(float)*A_sz);
+    cudaMalloc((void**)&B_d,sizeof(float)*B_sz);
+    cudaMalloc((void**)&C_d,sizeof(float)*C_sz);
     /*************************************************************************/
 	
     cudaDeviceSynchronize();
@@ -77,6 +79,8 @@ int main (int argc, char *argv[])
 	
     /*************************************************************************/
     //INSERT CODE HERE
+    cudaMemcpy(A_d,A_h,sizeof(float)*A_sz,cudaMemcpyHostToDevice);
+    cudaMemcpy(B_d,B_h,sizeof(float)*B_sz,cudaMemcpyHostToDevice);
 
     /*************************************************************************/
     
@@ -98,7 +102,7 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     //INSERT CODE HERE
-
+    cudaMemcpy(C_h,C_d,sizeof(float)*C_sz,cudaMemcpyDeviceToHost);
     /*************************************************************************/
 
     cudaDeviceSynchronize();
@@ -108,7 +112,7 @@ int main (int argc, char *argv[])
 
     printf("Verifying results..."); fflush(stdout);
 
-    verify(A_h, B_h, C_h, matArow, matAcol, matBcol);
+    verify(A_h, B_h, C_h, matArow, matAcol, matBcol); //commented out for timing results
 
 
     // Free memory ------------------------------------------------------------
@@ -119,7 +123,9 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     //INSERT CODE HERE
-    
+    cudaFree(A_d);
+    cudaFree(B_d);
+    cudaFree(C_d);   
     /*************************************************************************/
 
     return 0;
