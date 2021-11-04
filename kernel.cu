@@ -35,9 +35,9 @@ __global__ void mysgemm(int m, int n, int k, const float *A, const float *B, flo
     float pval = 0.0;
     
     // load data from A,B into shared mem + boundary checking & zero padding
-    for(int p = 0; p < (k-1)/TILE_SIZE+1;p++)
+    for(int p = 0; p < (k-1)/TILE_SIZE + 1; p++)
     {
-    	if(Row < m && (p * TILE_SIZE + tx < k)) //load M - within boundary;  note: (a = m x k)
+    	if(Row < m && p * TILE_SIZE + tx < k) //load M - within boundary;  note: (a = m x k)
 	{
 	    ds_M[ty][tx] = A[Row * k + p * TILE_SIZE + tx];
 	}
@@ -47,7 +47,7 @@ __global__ void mysgemm(int m, int n, int k, const float *A, const float *B, flo
 	}
 	if(p*TILE_SIZE + ty < k && Col < n) // load N - within boundary; note: (b = k x n)
 	{
-	   ds_N[ty][tx] = B[(p*TILE_SIZE + ty) * k + Col];
+	   ds_N[ty][tx] = B[(p*TILE_SIZE + ty) * n + Col];
 	}
 	else // pad 0
 	{
@@ -81,7 +81,7 @@ void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C)
 	
     /*************************************************************************/
     //INSERT CODE HERE
-    dim3 DimGrid(((n-1)/BLOCK_SIZE)+1 , ((m-1)/BLOCK_SIZE)+1,1);
+    dim3 DimGrid((n-1)/BLOCK_SIZE + 1 , (m-1)/BLOCK_SIZE + 1,1);
     dim3 DimBlock(BLOCK_SIZE, BLOCK_SIZE, 1);
     /*************************************************************************/
 
