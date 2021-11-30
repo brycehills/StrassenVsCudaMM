@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "kernel.cu"
 #include "support.h"
+#include <iostream>
+#include "mm.cpp" 
 
 int main (int argc, char *argv[])
 {
@@ -53,6 +55,22 @@ int main (int argc, char *argv[])
     for (unsigned int i=0; i < B_sz; i++) { B_h[i] = (rand()%100)/100.00; }
 
     C_h = (float*) malloc( sizeof(float)*C_sz );
+    //*********************************************************************
+    // ~~ final project driver code ~~
+    //----------------------------------
+    //generate rand matrices for naive mm and strassen
+    // int MM_size = 1000;
+    float mm_A[MM_SIZE][MM_SIZE];
+    float mm_B[MM_SIZE][MM_SIZE];
+    for(int i = 0; i < MM_SIZE; i++){
+	for(int j = 0; j < MM_SIZE; j++){
+		mm_A[i][j] = rand()%100/100.00;
+		mm_B[i][j] = rand()%100/100.00;
+	}
+    }
+    mm(mm_A,mm_B, 1000,1000,1000,1000);
+
+    //*********************************************************************
 
     stopTime(&timer); printf("%f s\n", elapsedTime(timer));
     printf("    A: %u x %u\n    B: %u x %u\n    C: %u x %u\n", matArow, matAcol,
