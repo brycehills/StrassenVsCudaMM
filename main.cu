@@ -15,17 +15,38 @@ int main (int argc, char *argv[])
     // ~~ final project driver code ~~
     //----------------------------------
     //generate rand matrices for naive mm and strassen
-    // int MM_size = 1000;
     float mm_A[MM_SIZE][MM_SIZE];
     float mm_B[MM_SIZE][MM_SIZE];
+    float mm_N[MM_SIZE][MM_SIZE];
+    float mm_R[MM_SIZE][MM_SIZE];
     for(int i = 0; i < MM_SIZE; i++){
 	for(int j = 0; j < MM_SIZE; j++){
 		mm_A[i][j] = (rand()%100)/100.00;
 		mm_B[i][j] = (rand()%100)/100.00;
 	}
     }
-    mm(mm_A,mm_B);
 
+    //--------------------------------------------------------------------
+    //naive mm driver code
+    //--------------------------------------------------------------------
+    cout << "starting naive mm" << endl;
+    //start timer n mm
+    mm(mm_A,mm_B,mm_N);
+    PrintMatrix(mm_N,MM_SIZE);
+    //end timer n mm
+    cout << "naive mm elapsed time: " << endl;
+    cout << endl << endl;
+
+    //--------------------------------------------------------------------
+    // strassen driver code
+    //--------------------------------------------------------------------
+    cout << "starting stassen mm" << endl;
+    // start strass timer
+    Strassen(mm_A,mm_B,mm_R,MM_SIZE);
+    //emd strass timer
+    cout << "strassen elapsed time: " << endl;
+    PrintMatrix(mm_R,MM_SIZE);
+    cout << endl << endl;
     //*********************************************************************
 
     // Initialize host variables ----------------------------------------------
