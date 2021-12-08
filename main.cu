@@ -3,14 +3,15 @@
 #include "kernel.cu"
 #include "support.h"
 #include <iostream>
-#include "mm.cpp" 
+#include "mm.cpp"
+#include <bits/stdc++.h> 
 
 int main (int argc, char *argv[])
 {
 
     Timer timer;
     cudaError_t cuda_ret;
-
+    time_t start,end;
     //*********************************************************************
     // ~~ final project driver code ~~
     //----------------------------------
@@ -19,22 +20,29 @@ int main (int argc, char *argv[])
     float mm_B[MM_SIZE][MM_SIZE];
     float mm_N[MM_SIZE][MM_SIZE];
     float mm_R[MM_SIZE][MM_SIZE];
-    for(int i = 0; i < MM_SIZE; i++){
+
+    //attempt to allcoate m's from heap
+    
+
+  for(int i = 0; i < MM_SIZE; i++){
 	for(int j = 0; j < MM_SIZE; j++){
 		mm_A[i][j] = (rand()%100)/100.00;
 		mm_B[i][j] = (rand()%100)/100.00;
 	}
-    }
+     }
 
     //--------------------------------------------------------------------
     //naive mm driver code
     //--------------------------------------------------------------------
     cout << "starting naive mm" << endl;
     //start timer n mm
-    mm(mm_A,mm_B,mm_N);
-    PrintMatrix(mm_N,MM_SIZE);
+    time(&start);
+    mm(mm_A,mm_B,mm_R);
+    //PrintMatrix(mm_N,MM_SIZE);
     //end timer n mm
-    cout << "naive mm elapsed time: " << endl;
+    time(&end);
+    double timetaken = double(end - start);
+    cout << "naive mm elapsed time: " << timetaken << endl;
     cout << endl << endl;
 
     //--------------------------------------------------------------------
@@ -45,8 +53,14 @@ int main (int argc, char *argv[])
     Strassen(mm_A,mm_B,mm_R,MM_SIZE);
     //emd strass timer
     cout << "strassen elapsed time: " << endl;
-    PrintMatrix(mm_R,MM_SIZE);
+    //PrintMatrix(mm_R,MM_SIZE);
     cout << endl << endl;
+
+    //free m vars
+    //free(A_MM);
+    //free(B_MM);
+    //free(C_MM);
+
     //*********************************************************************
 
     // Initialize host variables ----------------------------------------------

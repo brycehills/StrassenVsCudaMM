@@ -4,7 +4,7 @@
 
 using namespace std;
 
-#define MM_SIZE 8
+#define MM_SIZE 64
 
 void PrintMatrix(float a[MM_SIZE][MM_SIZE], int n){
 	cout << "Printing matrix: " << endl;
@@ -62,7 +62,7 @@ void Strassen(float a[MM_SIZE][MM_SIZE], float b[MM_SIZE][MM_SIZE], float r[MM_S
 	}	
 	else
 	{
-		int d = n/2;
+		int d = int(n/2);
 		//declare sub matrices
 		float a11[MM_SIZE][MM_SIZE];
 		float a12[MM_SIZE][MM_SIZE];		
