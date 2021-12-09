@@ -1,10 +1,10 @@
 #include <stdio.h>
+#include<time.h>
 #include <stdlib.h>
 #include "kernel.cu"
 #include "support.h"
 #include <iostream>
 #include "mm.cpp"
-#include <bits/stdc++.h> 
 
 //using namespace std;
 
@@ -13,7 +13,6 @@ int main (int argc, char *argv[])
 
     Timer timer;
     cudaError_t cuda_ret;
-    time_t start,end;
     //*********************************************************************
     // ~~ final project driver code ~~
     //----------------------------------
@@ -35,16 +34,13 @@ int main (int argc, char *argv[])
     //naive mm driver code
     //--------------------------------------------------------------------
     cout << "starting naive mm" << endl;
-    //start timer n mm
-    time(&start);
+    clock_t start = clock();
     mm(a,b,r);
     //PrintMatrix(r,MM_SIZE);
-    //end timer n mm
-    time(&end);
-    double timetaken = double(end - start);
-    cout << "naive mm elapsed time: " << timetaken << endl;
+    clock_t end = clock();
+    double timetaken = double(end - start)/CLOCKS_PER_SEC;
+    printf("Time measured: %.3f seconds.\n", timetaken);
     cout << endl << endl;
-   
     start = 0;
     end = 0;
     //--------------------------------------------------------------------
@@ -52,12 +48,11 @@ int main (int argc, char *argv[])
     //--------------------------------------------------------------------
     cout << "starting stassen mm" << endl;
     // start strass timer
-    time(&start);
+    clock_t start1 = clock();
     Strassen(a,b,r2,MM_SIZE);
-    //emd strass timer
-    time(&end);
-    double timetaken_strass = double(start - end);
-    cout << "strassen elapsed time: " << timetaken_strass << endl;
+    clock_t end1 = clock();
+    double timetaken_strass = double(end1 - start1)/CLOCKS_PER_SEC;
+    printf("Time measured for strassen mm: %.3f seconds.\n", timetaken_strass);
     //PrintMatrix(r2,MM_SIZE);
     cout << endl << endl;
 
