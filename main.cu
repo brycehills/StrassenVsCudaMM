@@ -6,6 +6,8 @@
 #include "mm.cpp"
 #include <bits/stdc++.h> 
 
+//using namespace std;
+
 int main (int argc, char *argv[])
 {
 
@@ -16,18 +18,24 @@ int main (int argc, char *argv[])
     // ~~ final project driver code ~~
     //----------------------------------
     //generate rand matrices for naive mm and strassen
-    float mm_A[MM_SIZE][MM_SIZE];
-    float mm_B[MM_SIZE][MM_SIZE];
-    float mm_N[MM_SIZE][MM_SIZE];
-    float mm_R[MM_SIZE][MM_SIZE];
+   // float mm_A[MM_SIZE][MM_SIZE];
+   // float mm_B[MM_SIZE][MM_SIZE];
+   // float mm_N[MM_SIZE][MM_SIZE];
+   // float mm_R[MM_SIZE][MM_SIZE];
 
     //attempt to allcoate m's from heap
-    
 
-  for(int i = 0; i < MM_SIZE; i++){
-	for(int j = 0; j < MM_SIZE; j++){
-		mm_A[i][j] = (rand()%100)/100.00;
-		mm_B[i][j] = (rand()%100)/100.00;
+    vector<float> im (MM_SIZE);
+
+    vector<vector<float> > a(MM_SIZE,im);
+    vector<vector<float> > b(MM_SIZE,im);
+    vector<vector<float> > r(MM_SIZE,im);
+    vector<vector<float> > r2(MM_SIZE,im);
+
+    for(int i = 0; i < MM_SIZE; i++){
+	for(int j = 0; j< MM_SIZE; j++){
+		a[i][j] = (rand()%100)/100.00;
+		b[i][j] = (rand()%100)/100.00;
 	}
      }
 
@@ -37,8 +45,8 @@ int main (int argc, char *argv[])
     cout << "starting naive mm" << endl;
     //start timer n mm
     time(&start);
-    mm(mm_A,mm_B,mm_R);
-    //PrintMatrix(mm_N,MM_SIZE);
+    mm(a,b,r);
+    //PrintMatrix(r,MM_SIZE);
     //end timer n mm
     time(&end);
     double timetaken = double(end - start);
@@ -50,16 +58,11 @@ int main (int argc, char *argv[])
     //--------------------------------------------------------------------
     cout << "starting stassen mm" << endl;
     // start strass timer
-    Strassen(mm_A,mm_B,mm_R,MM_SIZE);
+    Strassen(a,b,r2,MM_SIZE);
     //emd strass timer
     cout << "strassen elapsed time: " << endl;
-    //PrintMatrix(mm_R,MM_SIZE);
+    //PrintMatrix(r2,MM_SIZE);
     cout << endl << endl;
-
-    //free m vars
-    //free(A_MM);
-    //free(B_MM);
-    //free(C_MM);
 
     //*********************************************************************
 
