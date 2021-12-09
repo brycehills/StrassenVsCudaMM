@@ -1,0 +1,7 @@
+*.exe
+*.o
+*.data
+2
+\
+*.qdrep
+*.sqlite
