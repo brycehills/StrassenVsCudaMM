@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-#define MM_SIZE 1024
+#define MM_SIZE 512
 
 void PrintMatrix(vector<vector<float> > &a, int n){
 	cout << "Printing matrix: " << endl;
@@ -19,8 +19,6 @@ void PrintMatrix(vector<vector<float> > &a, int n){
 
 
 void mm(vector<vector<float> > &a, vector<vector<float> > &b, vector<vector<float> > &r){
-
-	cout << "starting naive mm..." << endl;
 
 	for(int i = 0; i < MM_SIZE; i++){
 		for(int j = 0; j < MM_SIZE; j++){

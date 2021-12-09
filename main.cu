@@ -17,21 +17,13 @@ int main (int argc, char *argv[])
     //*********************************************************************
     // ~~ final project driver code ~~
     //----------------------------------
-    //generate rand matrices for naive mm and strassen
-   // float mm_A[MM_SIZE][MM_SIZE];
-   // float mm_B[MM_SIZE][MM_SIZE];
-   // float mm_N[MM_SIZE][MM_SIZE];
-   // float mm_R[MM_SIZE][MM_SIZE];
-
-    //attempt to allcoate m's from heap
-
     vector<float> im (MM_SIZE);
-
+    // allocate vector matrices -- on heap
     vector<vector<float> > a(MM_SIZE,im);
     vector<vector<float> > b(MM_SIZE,im);
     vector<vector<float> > r(MM_SIZE,im);
     vector<vector<float> > r2(MM_SIZE,im);
-
+    // populate matrices w random values
     for(int i = 0; i < MM_SIZE; i++){
 	for(int j = 0; j< MM_SIZE; j++){
 		a[i][j] = (rand()%100)/100.00;
@@ -52,15 +44,20 @@ int main (int argc, char *argv[])
     double timetaken = double(end - start);
     cout << "naive mm elapsed time: " << timetaken << endl;
     cout << endl << endl;
-
+   
+    start = 0;
+    end = 0;
     //--------------------------------------------------------------------
     // strassen driver code
     //--------------------------------------------------------------------
     cout << "starting stassen mm" << endl;
     // start strass timer
+    time(&start);
     Strassen(a,b,r2,MM_SIZE);
     //emd strass timer
-    cout << "strassen elapsed time: " << endl;
+    time(&end);
+    double timetaken_strass = double(start - end);
+    cout << "strassen elapsed time: " << timetaken_strass << endl;
     //PrintMatrix(r2,MM_SIZE);
     cout << endl << endl;
 
