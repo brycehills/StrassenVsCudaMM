@@ -16,6 +16,7 @@ Otherwise 1 argument n creates nxn matrices. (recommended square & power of 2)
 Default tile size set to 16
 
 ```bash
+make clean
 make 
 ./sgemm-tiled
 ```
