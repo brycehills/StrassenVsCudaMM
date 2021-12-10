@@ -4,7 +4,7 @@ Comparison of Strassen MM O(n^2.8) vs utilizing shared memory/tiling & multithre
 
 ## System Requirements
 
-Cuda Capable nvidia GPU
+Cuda Capable nvidia GPU  
 CUDA toolkit - (available at http://developer.nvidia.com/cuda-downloads)  
 Reccomended - perf, nsys(part of cuda tk)  
 
