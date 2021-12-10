@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <omp.h>
 using namespace std;
-
-#define MM_SIZE 512
 
 void PrintMatrix(vector<vector<float> > &a, int n){
 	cout << "Printing matrix: " << endl;
@@ -18,12 +17,12 @@ void PrintMatrix(vector<vector<float> > &a, int n){
 } 
 
 
-void mm(vector<vector<float> > &a, vector<vector<float> > &b, vector<vector<float> > &r){
+void mm(vector<vector<float> > &a, vector<vector<float> > &b, vector<vector<float> > &r, int n){
 
-	for(int i = 0; i < MM_SIZE; i++){
-		for(int j = 0; j < MM_SIZE; j++){
+	for(int i = 0; i < n; i++){
+		for(int j = 0; j < n; j++){
 			r[i][j] = 0;
-			for(int k = 0; k < MM_SIZE; k++){
+			for(int k = 0; k < n; k++){
 				r[i][j] += a[i][k] * b[k][j];
 			}
 		}
@@ -33,6 +32,7 @@ void mm(vector<vector<float> > &a, vector<vector<float> > &b, vector<vector<floa
 
 void AddMatrix(vector<vector<float> > &a, vector<vector<float> > &b, vector< vector<float> > &r, int n)
 {
+	#pragma omp parallel for
 	for(int i = 0; i < n; i++){
 
 		for(int j = 0; j < n; j++){
@@ -44,6 +44,7 @@ void AddMatrix(vector<vector<float> > &a, vector<vector<float> > &b, vector< vec
 	
 void SubMatrix(vector< vector<float> > &a, vector< vector<float> > &b, vector< vector<float> > &r, int n)
 {
+        #pragma omp parallel for
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
 			r[i][j] = a[i][j] - b[i][j];
@@ -53,6 +54,7 @@ void SubMatrix(vector< vector<float> > &a, vector< vector<float> > &b, vector< v
 
 void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< vector<float> > &r, int n)
 {
+	//omp_set_nested(1);
 	if(n==1) //base case
 	{
 		r[0][0] = a[0][0] * b[0][0];
@@ -68,35 +70,7 @@ void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< ve
 					c11(d,im), c12(d,im), c21(d,im), c22(d,im), 
 					p1(d,im), p2(d,im), p3(d,im), p4(d,im), p5(d,im), p6(d,im), p7(d,im), 
 					AR(d,im), BR(d,im); 
-		
-
-		//declare sub matrices
-		//float a11[MM_SIZE][MM_SIZE];
-		//float a12[MM_SIZE][MM_SIZE];		
-		//float a21[MM_SIZE][MM_SIZE];
-		//float a22[MM_SIZE][MM_SIZE];
-
-		//float b11[MM_SIZE][MM_SIZE];
-		//float b12[MM_SIZE][MM_SIZE];
-		//float b21[MM_SIZE][MM_SIZE];
-		//float b22[MM_SIZE][MM_SIZE];
-
-		//float c11[MM_SIZE][MM_SIZE];
-		//float c12[MM_SIZE][MM_SIZE];
-		//float c21[MM_SIZE][MM_SIZE];
-		//float c22[MM_SIZE][MM_SIZE];
-
-		//float p1[MM_SIZE][MM_SIZE];
-		//float p2[MM_SIZE][MM_SIZE];
-		//float p3[MM_SIZE][MM_SIZE];
-		//float p4[MM_SIZE][MM_SIZE];
-		//float p5[MM_SIZE][MM_SIZE];
-		//float p6[MM_SIZE][MM_SIZE];
-		//float p7[MM_SIZE][MM_SIZE];
-
-		//float AR[MM_SIZE][MM_SIZE];
-		//float BR[MM_SIZE][MM_SIZE];
-	
+	#pragma omp parallel for		
 	for(int i = 0; i < d; i++){
 		for (int j = 0; j < d; j++){
 			//div up a sub matrices
@@ -115,34 +89,34 @@ void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< ve
 	//-------------------
 	// calc p1,p2,...p7
 	// ------------------
+	#pragma omp parallel num_threads(7) //assign thread per section
 	AddMatrix(a11,a22,AR,d); // add a11, a22
 	AddMatrix(b11,b22,BR,d); // add b11, b22
 	Strassen(AR,BR,p1,d);	// strass result a & result b into p1
- 
+	
 	AddMatrix(a21,a22,AR,d); // add a21 + a22
 	Strassen(AR,b11,p2,d); 	// call strassen p2 = ar * b11
-
+	
 	SubMatrix(b12,b22,BR,d);// sub br = b12 - b22
-	Strassen(a11,BR,p3,d);// recursive call p3 = a11 * br 
+	Strassen(a11,BR,p3,d);// recursive call p3 = a11 * 
 	
 	SubMatrix(b21,b11,BR,d);// sub b21 - b11 
 	Strassen(a22,BR,p4,d);// recursive call p4 = a22 * br
-
+		
 	AddMatrix(a11,a12,AR,d);// add a11 + a12
 	Strassen(AR,b22,p5,d);// strass p5 = ar * b22
-
+	
 	SubMatrix(a21,a11,AR,d); // sub a21 - a11
 	AddMatrix(b11,b12,BR,d); // add b11 + b12
 	Strassen(AR,BR,p6,d);// strass p6 = ar * br
-	
+
 	SubMatrix(a12,a22,AR,d); // sub a12 - a22 
 	AddMatrix(b21,b22,BR,d);// add b21 + b22
 	Strassen(AR,BR,p7,d);// strass p7 = ar * br
-	//---------------------
 	// calc c sub matrices
 	AddMatrix(p3,p5,c12,d);// c12 = p3+p5
 	AddMatrix(p2,p4,c21,d);// c21 = p2+p4
-	//
+	
 	AddMatrix(p1,p4,AR,d);//add p1 p4
 	AddMatrix(AR,p7,BR,d);//add (p1,p4) p7
 	SubMatrix(BR,p5,c11,d);//sub c11= p1 + p4 - p5 + p7
@@ -150,8 +124,9 @@ void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< ve
 	AddMatrix(p1,p3,AR,d);//p1 + p3
 	AddMatrix(AR,p6,BR,d);//p1+p3 + p6
 	SubMatrix(BR,p2,c22,d);//c22 = p1+p3-p2+p6
-
+	#pragma omp taskwait
 	//merge result matrix r
+	#pragma omp parallel for
 	for(int i =0; i < d; i++){
 		for( int j = 0; j < d; j++){
 			r[i][j] = c11[i][j];

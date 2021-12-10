@@ -18,7 +18,7 @@ support.o: support.cu support.h
 	$(NVCC) -c -o $@ support.cu $(NVCC_FLAGS)
 
 $(EXE): $(OBJ)
-	$(NVCC) $(OBJ) -o $(EXE) $(LD_FLAGS)
+	$(NVCC) $(OBJ) -o $(EXE) $(LD_FLAGS) $(CFLAGS)
 
 clean:
 	rm -rf *.o $(EXE)
