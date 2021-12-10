@@ -13,9 +13,14 @@ Reccomended - perf, nsys(part of cuda tk)
 Executable default no arg will pass matrix size 256 x 256   
 Otherwise 1 argument n creates nxn matrices. (recommended square & power of 2)  
 2 args: m & n gives - mxn & nxm input matrices.  
+Default tile size set to 16
 
 ```bash
 make 
 ./sgemm-tiled
 ```
 
+## Revelant Info
+
+![alt text](https://puu.sh/Ivhfs/522eeeadfd.png)  
+![alt text](https://puu.sh/IvhfZ/927df7d197.jpg)  
