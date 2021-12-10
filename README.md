@@ -1,6 +1,6 @@
 # Strassen MM VS Cuda Matrix Mulitply
 
-Comparison of improve MM time complexity O(n^2.8) vs utilizing shared memory/tiling & multithreading with CUDA on NVIDIA GPU
+Comparison of Strassen MM O(n^2.8) vs utilizing shared memory/tiling & multithreading with CUDA on NVIDIA GPU
 
 ## System Requirements
 
