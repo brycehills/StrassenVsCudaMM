@@ -11,7 +11,7 @@ Reccomended - perf, nsys(part of cuda tk)
 ## Compile/Run
 
 Executable default no arg will pass matrix size 256 x 256   
-Otherwise 1 argument n creates nxn matrices. (recommended square & power of 2)  
+1 arg n creates nxn matrices. (recommended square & power of 2)  
 2 args: m & n gives - mxn & nxm input matrices.  
 Default tile size set to 16
 
