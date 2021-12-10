@@ -25,7 +25,7 @@ make
 
 ![alt text](https://puu.sh/Ivhfs/522eeeadfd.png)  
 Though the Strassen implementation needs further optimization to account for recursive latency,  
-Cuda MM outperforms both naive and Strassen significantly
+Cuda MM outperforms both naive and Strassen mm significantly
   
     
    
