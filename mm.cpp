@@ -32,7 +32,6 @@ void mm(vector<vector<float> > &a, vector<vector<float> > &b, vector<vector<floa
 
 void AddMatrix(vector<vector<float> > &a, vector<vector<float> > &b, vector< vector<float> > &r, int n)
 {
-	#pragma omp parallel for
 	for(int i = 0; i < n; i++){
 
 		for(int j = 0; j < n; j++){
@@ -44,7 +43,6 @@ void AddMatrix(vector<vector<float> > &a, vector<vector<float> > &b, vector< vec
 	
 void SubMatrix(vector< vector<float> > &a, vector< vector<float> > &b, vector< vector<float> > &r, int n)
 {
-        #pragma omp parallel for
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
 			r[i][j] = a[i][j] - b[i][j];
@@ -54,7 +52,6 @@ void SubMatrix(vector< vector<float> > &a, vector< vector<float> > &b, vector< v
 
 void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< vector<float> > &r, int n)
 {
-	//omp_set_nested(1);
 	if(n==1) //base case
 	{
 		r[0][0] = a[0][0] * b[0][0];
@@ -70,7 +67,6 @@ void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< ve
 					c11(d,im), c12(d,im), c21(d,im), c22(d,im), 
 					p1(d,im), p2(d,im), p3(d,im), p4(d,im), p5(d,im), p6(d,im), p7(d,im), 
 					AR(d,im), BR(d,im); 
-	#pragma omp parallel for		
 	for(int i = 0; i < d; i++){
 		for (int j = 0; j < d; j++){
 			//div up a sub matrices
@@ -87,9 +83,8 @@ void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< ve
 
 	} 
 	//-------------------
-	// calc p1,p2,...p7
+	// calc p1,p2,...,p7
 	// ------------------
-	#pragma omp parallel num_threads(7) //assign thread per section
 	AddMatrix(a11,a22,AR,d); // add a11, a22
 	AddMatrix(b11,b22,BR,d); // add b11, b22
 	Strassen(AR,BR,p1,d);	// strass result a & result b into p1
@@ -124,9 +119,7 @@ void Strassen(vector< vector<float> > &a, vector< vector<float> > &b, vector< ve
 	AddMatrix(p1,p3,AR,d);//p1 + p3
 	AddMatrix(AR,p6,BR,d);//p1+p3 + p6
 	SubMatrix(BR,p2,c22,d);//c22 = p1+p3-p2+p6
-	#pragma omp taskwait
 	//merge result matrix r
-	#pragma omp parallel for
 	for(int i =0; i < d; i++){
 		for( int j = 0; j < d; j++){
 			r[i][j] = c11[i][j];
