@@ -23,12 +23,12 @@ make
 
 ## Revelant Info
 
-![alt text](https://github.com/brycehills/StrassenVsCudaMM/blob/main/resources/cudaapistats.JPG)  
+![alt text](https://github.com/brycehills/StrassenVsCudaMM/blob/main/resources/timing.JPG)  
 Though the Strassen implementation needs further optimization to account for recursive latency,  
 Cuda MM outperforms both naive and Strassen mm significantly
   
     
    
-![alt text](https://github.com/brycehills/StrassenVsCudaMM/blob/main/resources/timing.JPG)  
+![alt text](https://github.com/brycehills/StrassenVsCudaMM/blob/main/resources/cudaapistats.JPG)  
 Additionally, we can see that the major bottleneck for the CUDA MM is memory allocation.  
 My initial assumption was that data transfer bewteen host and device would be the main bottleneck.  
